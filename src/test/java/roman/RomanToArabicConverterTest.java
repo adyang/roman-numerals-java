@@ -11,7 +11,7 @@ class RomanToArabicConverterTest {
 
     @BeforeEach
     void setUp() {
-        this.converter = new RomanToArabicConverter();
+        this.converter = new RomanToArabicConverter(new RomanChunker());
     }
 
     @Nested
@@ -98,6 +98,14 @@ class RomanToArabicConverterTest {
         @Test
         void convertLowerHalfAdditionNumerals() {
             assertEquals(3000, converter.convert("MMM"));
+        }
+    }
+
+    @Nested
+    class mixedPlaceNumeralConversion {
+        @Test
+        void convertLowerHalfAdditionNumerals() {
+            assertEquals(11, converter.convert("XI"));
         }
     }
 }

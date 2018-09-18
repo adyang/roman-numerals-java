@@ -1,14 +1,23 @@
 package roman;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.stream.Stream;
 
 public class RomanToArabicConverter {
+    private RomanChunker romanChunker;
+
+    public RomanToArabicConverter(RomanChunker romanChunker) {
+        this.romanChunker = romanChunker;
+    }
+
     public int convert(String roman) {
-        Group group = Group.from(roman);
-        return toArabicDigit(roman, group) * group.magnitude;
+        return this.romanChunker.split(roman)
+                .mapToInt(this::chunkToArabicValue)
+                .sum();
+    }
+
+    private int chunkToArabicValue(String romanChunk) {
+        Group group = Group.from(romanChunk);
+        return toArabicDigit(romanChunk, group) * group.magnitude;
     }
 
     private int toArabicDigit(String roman, Group group) {
@@ -30,49 +39,5 @@ public class RomanToArabicConverter {
     private SimpleImmutableEntry<Integer, Character> computeRomanNumerals(SimpleImmutableEntry<Integer, Character> lessSig, SimpleImmutableEntry<Integer, Character> moreSig, Group group) {
         int sumSoFar = group.isSubtraction(lessSig.getValue()) ? lessSig.getKey() - moreSig.getKey() : lessSig.getKey() + moreSig.getKey();
         return pair(sumSoFar, moreSig.getValue());
-    }
-
-    enum Group {
-        ONES('I', 'V', 'X', 1),
-        TENS('X', 'L', 'C', 10),
-        HUNDREDS('C', 'D', 'M', 100),
-        THOUSANDS('M', '\0', '\0', 1000);
-
-        private final char unit;
-        private final char half;
-        private final char full;
-        public final int magnitude;
-        private final HashMap<Character, Integer> digitMap = new HashMap<>();
-
-        Group(char unit, char half, char full, int magnitude) {
-            this.unit = unit;
-            this.half = half;
-            this.full = full;
-            this.magnitude = magnitude;
-            this.digitMap.put(unit, 1);
-            this.digitMap.put(half, 5);
-            this.digitMap.put(full, 10);
-        }
-
-        private static Group from(String romanChunk) {
-            return Arrays.stream(Group.values())
-                    .filter(g -> matchesGroup(romanChunk, g))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Unable to derive Group, invalid roman chunk: " + romanChunk));
-        }
-
-        private static boolean matchesGroup(String romanChunk, Group g) {
-            return Stream.of(g.unit, g.half)
-                    .filter(ch -> ch != '\0')
-                    .anyMatch(ch -> ch == romanChunk.charAt(0));
-        }
-
-        private int digit(int ch) {
-            return this.digitMap.get((char) ch);
-        }
-
-        private boolean isSubtraction(char lessSignificantChar) {
-            return lessSignificantChar == half || lessSignificantChar == full;
-        }
     }
 }
