@@ -104,8 +104,21 @@ class RomanToArabicConverterTest {
     @Nested
     class mixedPlaceNumeralConversion {
         @Test
-        void convertLowerHalfAdditionNumerals() {
+        void convertTensPlaceAndBelowNumerals() {
             assertEquals(11, converter.convert("XI"));
+            assertEquals(99, converter.convert("XCIX"));
+        }
+
+        @Test
+        void convertHundredsPlaceAndBelowNumerals() {
+            assertEquals(404, converter.convert("CDIV"));
+            assertEquals(949, converter.convert("CMXLIX"));
+        }
+
+        @Test
+        void convertThousandsPlaceAndBelowNumerals() {
+            assertEquals(1080, converter.convert("MLXXX"));
+            assertEquals(3999, converter.convert("MMMCMXCIX"));
         }
     }
 }
