@@ -23,6 +23,7 @@ class RomanToArabicConverterTest {
     @Test
     void convertBaseNumerals() {
         assertEquals(5, converter.convert("V"));
+        assertEquals(10, converter.convert("X"));
     }
 
     @Test
@@ -35,5 +36,6 @@ class RomanToArabicConverterTest {
     @Test
     void convertSubtractionNumerals() {
         assertEquals(4, converter.convert("IV"));
+        assertEquals(9, converter.convert("IX"));
     }
 }

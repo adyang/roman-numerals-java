@@ -1,6 +1,7 @@
 package roman;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Arrays;
 
 public class RomanToArabicConverter {
     public int convert(String roman) {
@@ -21,11 +22,21 @@ public class RomanToArabicConverter {
 
     private SimpleImmutableEntry<Integer, Character> computeRomanNumerals(SimpleImmutableEntry<Integer, Character> lessSig, SimpleImmutableEntry<Integer, Character> moreSig) {
         char lessSigChar = lessSig.getValue();
-        int sumSoFar = lessSigChar == 'V' ? lessSig.getKey() - moreSig.getKey() : lessSig.getKey() + moreSig.getKey();
+        int sumSoFar = isBaseChar(lessSigChar) ? lessSig.getKey() - moreSig.getKey() : lessSig.getKey() + moreSig.getKey();
         return pair(sumSoFar, moreSig.getValue());
     }
 
+    private boolean isBaseChar(char ch) {
+        return Arrays.asList('V', 'X').contains(ch);
+    }
+
     private int unitValue(int ch) {
-        return ch == 'V' ? 5 : 1;
+        switch (ch) {
+            case 'X': return 10;
+            case 'V': return 5;
+            case 'I': return 1;
+            default:
+                throw new IllegalArgumentException("Unknown Roman Character: " + ch);
+        }
     }
 }
