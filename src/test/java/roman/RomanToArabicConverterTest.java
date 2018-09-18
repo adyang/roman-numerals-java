@@ -24,7 +24,7 @@ class RomanToArabicConverterTest {
         }
 
         @Test
-        void convertBaseNumerals() {
+        void convertHalfNumeral() {
             assertEquals(5, converter.convert("V"));
         }
 
@@ -52,7 +52,7 @@ class RomanToArabicConverterTest {
         }
 
         @Test
-        void convertBaseNumerals() {
+        void convertHalfNumeral() {
             assertEquals(50, converter.convert("L"));
         }
 
@@ -66,6 +66,30 @@ class RomanToArabicConverterTest {
         void convertSubtractionNumerals() {
             assertEquals(40, converter.convert("XL"));
             assertEquals(90, converter.convert("XC"));
+        }
+    }
+
+    @Nested
+    class hundredsPlaceOnlyNumeralConversion {
+        @Test
+        void convertLowerHalfAdditionNumerals() {
+            assertEquals(300, converter.convert("CCC"));
+        }
+
+        @Test
+        void convertHalfNumeral() {
+            assertEquals(500, converter.convert("D"));
+        }
+
+        @Test
+        void convertUpperHalfAdditionNumerals() {
+            assertEquals(800, converter.convert("DCCC"));
+        }
+
+        @Test
+        void convertSubtractionNumerals() {
+            assertEquals(400, converter.convert("CD"));
+            assertEquals(900, converter.convert("CM"));
         }
     }
 }

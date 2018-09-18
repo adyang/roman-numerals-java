@@ -6,18 +6,7 @@ import java.util.HashMap;
 
 public class RomanToArabicConverter {
     public int convert(String roman) {
-        if (isOnesGroup(roman)) {
-            return convertToArabic(roman, Group.ONES);
-        } else {
-            return convertToArabic(roman, Group.TENS);
-        }
-    }
-
-    private boolean isOnesGroup(String roman) {
-        return Arrays.asList('I', 'V').contains(roman.charAt(0));
-    }
-
-    private int convertToArabic(String roman, Group group) {
+        Group group = Group.from(roman);
         return toArabicDigit(roman, group) * group.magnitude;
     }
 
@@ -44,7 +33,8 @@ public class RomanToArabicConverter {
 
     enum Group {
         ONES('I', 'V', 'X', 1),
-        TENS('X', 'L', 'C', 10);
+        TENS('X', 'L', 'C', 10),
+        HUNDREDS('C', 'D', 'M', 100);
 
         private final char unit;
         private final char half;
@@ -60,6 +50,13 @@ public class RomanToArabicConverter {
             this.digitMap.put(unit, 1);
             this.digitMap.put(half, 5);
             this.digitMap.put(full, 10);
+        }
+
+        private static Group from(String romanChunk) {
+            return Arrays.stream(Group.values())
+                    .filter(g -> Arrays.asList(g.unit, g.half).contains(romanChunk.charAt(0)))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Unable to derive Group, invalid roman chunk: " + romanChunk));
         }
 
         private int digit(int ch) {
