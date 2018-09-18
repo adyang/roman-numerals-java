@@ -3,6 +3,7 @@ package roman;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 public class RomanToArabicConverter {
     public int convert(String roman) {
@@ -34,7 +35,8 @@ public class RomanToArabicConverter {
     enum Group {
         ONES('I', 'V', 'X', 1),
         TENS('X', 'L', 'C', 10),
-        HUNDREDS('C', 'D', 'M', 100);
+        HUNDREDS('C', 'D', 'M', 100),
+        THOUSANDS('M', '\0', '\0', 1000);
 
         private final char unit;
         private final char half;
@@ -54,9 +56,15 @@ public class RomanToArabicConverter {
 
         private static Group from(String romanChunk) {
             return Arrays.stream(Group.values())
-                    .filter(g -> Arrays.asList(g.unit, g.half).contains(romanChunk.charAt(0)))
+                    .filter(g -> matchesGroup(romanChunk, g))
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("Unable to derive Group, invalid roman chunk: " + romanChunk));
+        }
+
+        private static boolean matchesGroup(String romanChunk, Group g) {
+            return Stream.of(g.unit, g.half)
+                    .filter(ch -> ch != '\0')
+                    .anyMatch(ch -> ch == romanChunk.charAt(0));
         }
 
         private int digit(int ch) {

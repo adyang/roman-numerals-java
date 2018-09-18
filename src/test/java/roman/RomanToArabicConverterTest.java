@@ -92,4 +92,12 @@ class RomanToArabicConverterTest {
             assertEquals(900, converter.convert("CM"));
         }
     }
+
+    @Nested
+    class thousandsPlaceOnlyNumeralConversion {
+        @Test
+        void convertLowerHalfAdditionNumerals() {
+            assertEquals(3000, converter.convert("MMM"));
+        }
+    }
 }
