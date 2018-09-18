@@ -1,6 +1,7 @@
 package roman;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,29 +14,58 @@ class RomanToArabicConverterTest {
         this.converter = new RomanToArabicConverter();
     }
 
-    @Test
-    void convertLowerHalfAdditionNumerals() {
-        assertEquals(1, converter.convert("I"));
-        assertEquals(2, converter.convert("II"));
-        assertEquals(3, converter.convert("III"));
+    @Nested
+    class onesPlaceOnlyNumeralConversion {
+        @Test
+        void convertLowerHalfAdditionNumerals() {
+            assertEquals(1, converter.convert("I"));
+            assertEquals(2, converter.convert("II"));
+            assertEquals(3, converter.convert("III"));
+        }
+
+        @Test
+        void convertBaseNumerals() {
+            assertEquals(5, converter.convert("V"));
+        }
+
+        @Test
+        void convertUpperHalfAdditionNumerals() {
+            assertEquals(6, converter.convert("VI"));
+            assertEquals(7, converter.convert("VII"));
+            assertEquals(8, converter.convert("VIII"));
+        }
+
+        @Test
+        void convertSubtractionNumerals() {
+            assertEquals(4, converter.convert("IV"));
+            assertEquals(9, converter.convert("IX"));
+        }
     }
 
-    @Test
-    void convertBaseNumerals() {
-        assertEquals(5, converter.convert("V"));
-        assertEquals(10, converter.convert("X"));
-    }
+    @Nested
+    class tensPlaceOnlyNumeralConversion {
+        @Test
+        void convertLowerHalfAdditionNumerals() {
+            assertEquals(10, converter.convert("X"));
+            assertEquals(20, converter.convert("XX"));
+            assertEquals(30, converter.convert("XXX"));
+        }
 
-    @Test
-    void convertUpperHalfAdditionNumerals() {
-        assertEquals(6, converter.convert("VI"));
-        assertEquals(7, converter.convert("VII"));
-        assertEquals(8, converter.convert("VIII"));
-    }
+        @Test
+        void convertBaseNumerals() {
+            assertEquals(50, converter.convert("L"));
+        }
 
-    @Test
-    void convertSubtractionNumerals() {
-        assertEquals(4, converter.convert("IV"));
-        assertEquals(9, converter.convert("IX"));
+        @Test
+        void convertUpperHalfAdditionNumerals() {
+            assertEquals(60, converter.convert("LX"));
+            assertEquals(80, converter.convert("LXXX"));
+        }
+
+        @Test
+        void convertSubtractionNumerals() {
+            assertEquals(40, converter.convert("XL"));
+            assertEquals(90, converter.convert("XC"));
+        }
     }
 }
